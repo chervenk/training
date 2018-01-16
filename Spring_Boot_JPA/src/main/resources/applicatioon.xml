@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+           
+    <!-- context:component-scan base-package="com.mytests.controller"></context:component-scan-->       
+    <!--  context:property-placeholder location="myproperties.properties"/-->
+    
+	 <!--bean id="waterDeviceRepository" class="com.mytests.spring.repository.WaterDeviceRepository"></bean-->
+	 <!--bean id="recordRepository" class="com.mytests.spring.repository.RecordRepository"></bean-->
+
+	<bean id="entityManagerFactory"
+		
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
+		<!-- p:packagesToScan="com.mytests.spring.model" > -->
+	
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.mytests.spring.model"/>
+		<property name="jpaVendorAdapter">
+		
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="false" />
+				<property name="database" value="POSTGRESQL" />
+				
+			</bean>
+		</property>
+		<!--  property name="persistenceUnitName" value="persistence" /-->
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<!--  context:component-scan base-package="com.mytests.spring" /-->
+	<!-- TODO -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close">
+	<property name="driverClassName" value="org.postgresql.Driver"/>
+	<property name="url" value="jdbc:postgresql://127.0.0.1:5432/tutorialdb"/> 
+	<property name="username" value="huser"/> 
+	<property name="password" value="hpass"/>
+	</bean>
+	
+	<!-- jpa:repositories base-package="com.mytests.spring.repository"/-->
+
+</beans>
